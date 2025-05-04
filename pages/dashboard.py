@@ -75,3 +75,30 @@ st.markdown("Compete with the bot!")
 
 if st.button("Start New Game"):
     st.switch_page("pages/game.py")
+
+# ---------- List of Recent Games ----------
+st.subheader("🔥 Recent Games from Other Players")
+
+games_ref = db.collection("games").order_by("timestamp", direction="DESCENDING").limit(20)
+games = games_ref.stream()
+
+for game in games:
+    game_data = game.to_dict()
+    if game_data["user_id"] == uid:
+        continue  # Skip own games
+
+    game_id = game.id
+    username = game_data.get("username", "Unknown")
+    question = game_data.get("question", "No question")
+    votes = game_data.get("votes", {"bot": 0, "human": 0})
+    bot_votes = votes.get("bot", 0)
+    human_votes = votes.get("human", 0)
+
+    with st.container():
+        st.markdown(f"""
+        **🧑 User**: `{username}`  
+        **❓ Question**: *{question}*  
+        **📊 Votes** – Human: `{human_votes}`, Bot: `{bot_votes}`  
+        [👉 Spectate Game](pages/spectate.py?game_id={game_id})
+        """)
+        st.divider()
