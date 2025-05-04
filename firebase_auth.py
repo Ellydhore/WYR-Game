@@ -14,9 +14,23 @@ def login(email, password):
         response = requests.post(url, json=payload)
         response.raise_for_status()
         return response.json()
+
     except requests.exceptions.HTTPError as e:
-        error_message = response.json()["error"]["message"]
-        st.error(f"Login failed: {error_message}")
+        try:
+            error_response = response.json()
+            error_code = error_response.get("error", {}).get("message", "UNKNOWN_ERROR")
+
+            if error_code == "EMAIL_NOT_FOUND":
+                st.error("Email not found. Please check or register.")
+            elif error_code == "INVALID_PASSWORD":
+                st.error("Incorrect password. Try again.")
+            elif error_code == "USER_DISABLED":
+                st.error("This account has been disabled.")
+            else:
+                st.error(f"Login failed: {error_code}")
+
+        except Exception:
+            st.error("An unexpected error occurred during login.")
         return None
 
 def register(email, password, username, db):
