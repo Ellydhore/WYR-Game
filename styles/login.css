@@ -1,0 +1,21 @@
+div.block-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 100px;
+}
+
+h1 {
+    color: #FF4B4B;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+.stTextInput > div > div > input {
+    padding: 10px;
+}
+
+button {
+    margin-top: 10px;
+}
