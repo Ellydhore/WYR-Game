@@ -113,7 +113,7 @@ Convince the user—aggressively, humorously, and irrationally—why they should
 
                     response = requests.post(api_url, headers=headers, json=payload)
                     if response.status_code == 200:
-                        bot_reply = response.text.strip()
+                        bot_reply = response.json().get("text", "").strip()
                         st.session_state.bot_response = bot_reply
                         st.success("Bot has responded!")
                         st.markdown("### 🤖 Bot's Response:")
