@@ -1,7 +1,7 @@
 import requests
 import streamlit as st
 
-FIREBASE_WEB_API_KEY = "AIzaSyA5DJmF8h-gdy1OMPMUDPspxZ87X9V0pCY"
+FIREBASE_WEB_API_KEY = st.secrets["firebase_key"]
 
 def login(email, password):
     try:

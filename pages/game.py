@@ -104,7 +104,7 @@ Convince the user—aggressively, humorously, and irrationally—why they should
                 try:
                     headers = {
                         "Content-Type": "application/json",
-                        "Apikey": "Api-Key TZEB7oNt.FkfMzqaYEuzxGzIc2dqjIPVO7gWun0sc"
+                        "Apikey": "Api-Key " + st.secrets["vext_key"]
                     }
                     payload = {
                         "payload": prompt,
