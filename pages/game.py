@@ -117,6 +117,14 @@ Convince the user—aggressively, humorously, and irrationally—why they should
                         st.session_state.bot_response = bot_reply
                         st.success("Bot has responded!")
                         st.markdown("### 🤖 Bot's Response:")
+                        st.markdown(
+                            f"""
+                            <div style='font-size: 18px; line-height: 1.6; background-color: #f9f9f9; padding: 1em; border-radius: 8px;'>
+                                {bot_reply}
+                            </div>
+                            """,
+                            unsafe_allow_html=True
+                        )
                         st.markdown(f"> {bot_reply}")
                     else:
                         st.error(f"API Error: {response.status_code}\n{response.text}")
