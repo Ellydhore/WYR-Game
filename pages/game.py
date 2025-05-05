@@ -50,13 +50,13 @@ if st.session_state.game_started:
         user_explanation = st.text_area("Explain why you chose this option:")
 
         col1, col2, col3= st.columns(3)
-        with col1:
-            submit = st.button("🚀 Submit Answer")
+            with col1:
+                submit = st.button("🚀 Submit Answer")
 
-        with col2:
-            tryagain=  st.button("🎲 Try Another Question")
-        with col3:
-            cancel = st.button("❌ Exit Without Saving")
+            with col2:
+                tryagain=  st.button("🎲 Try Another Question")
+            with col3:
+                cancel = st.button("❌ Exit Without Saving")
 
         if cancel:
             st.warning("Game cancelled. Returning to dashboard...")
