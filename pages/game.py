@@ -119,7 +119,7 @@ Convince the user—aggressively, humorously, and irrationally—why they should
                         st.markdown("### 🤖 Bot's Response:")
                         st.markdown(
                             f"""
-                            <div style='font-size: 18px; line-height: 1.6; background-color: #222222; padding: 1em; border-radius: 8px;'>
+                            <div style='font-size: 21px; line-height: 1.6; background-color: #222222; padding: 1em; border-radius: 8px;'>
                                 {bot_reply}
                             </div>
                             """,
