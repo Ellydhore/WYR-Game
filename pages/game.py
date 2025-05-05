@@ -59,18 +59,20 @@ if st.session_state.game_started:
         if cancel:
             st.warning("Game cancelled. Returning to dashboard...")
             st.switch_page("pages/dashboard.py")
+            
+        elif tryagain:
+             st.session_state.selected_question = random.choice(questions)
+                # Clear any existing game state
+             if "finalized" in st.session_state:
+                del st.session_state.finalized
+             if "bot_response" in st.session_state:
+                del st.session_state.bot_response   
+             st.experimental_rerun()
 
         elif submit:
             if not user_explanation.strip():
                 st.error("Please provide a short explanation before submitting.")
                 st.stop()
-
-            st.session_state.finalized = {
-                "question": question,
-                "user_option": user_choice,
-                "other_option": option_2 if user_choice == option_1 else option_1,
-                "explanation": user_explanation.strip()
-            }
 
             # Build the prompt
             prompt = f"""
@@ -137,15 +139,6 @@ if "bot_response" in st.session_state and st.button("💾 Save Game and Return t
         "votes": {"human": 0, "bot": 0},
         "timestamp": datetime.datetime.utcnow()
     }
-
-    if st.button("🎲 Try Another Question"):
-        st.session_state.selected_question = random.choice(questions)
-        # Clear any existing game state
-    if "finalized" in st.session_state:
-        del st.session_state.finalized
-    if "bot_response" in st.session_state:
-        del st.session_state.bot_response
-    st.experimental_rerun()
 
     try:
         db.collection("games").add(game_data)
