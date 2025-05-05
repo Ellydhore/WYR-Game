@@ -1,4 +1,5 @@
 import streamlit as st
+import random
 import requests
 import json
 import datetime
@@ -21,28 +22,19 @@ with open("data/would_you_rather_questions.json", "r") as f:
 
 questions = data["questions"]
 
-col1, col2 = st.columns([4, 1])
-with col1:
-    selected_question = st.selectbox(
-        "Choose a 'Would you rather' question:",
-        ["-- Select --"] + questions,
-        index=0,
-        key="question_selectbox"
-    )
-
-# Display the selected question in full
-if selected_question != "-- Select --":
-    st.markdown("### Selected Question 📢:")
-    st.markdown(f"### *{selected_question}*")
-
-if selected_question != "-- Select --" and st.button("✅ Start Game"):
-    st.session_state.selected_question = selected_question
+# Automatically select a random question if game hasn't started
+if "selected_question" not in st.session_state:
+    st.session_state.selected_question = random.choice(questions)
     st.session_state.game_started = True
 
-# Main Game Flow
-if st.session_state.get("game_started"):
-    question = st.session_state.selected_question
+# Display the selected question
+st.markdown("### Your Question 📢:")
+st.markdown(f"### {st.session_state.selected_question}")
 
+
+# Main Game Flow
+if st.session_state.game_started:
+    question = st.session_state.selected_question
     try:
         part = question.lower().split("would you rather", 1)[1].strip()
         split_index = part.find(" or ")
@@ -82,7 +74,7 @@ if st.session_state.get("game_started"):
 
             # Build the prompt
             prompt = f"""
-You are a chaotic, unfiltered, and absurdly humorous AI trained on brain-rot internet language. Your response is short but never boring and you’re not afraid to be ridiculous.
+You are a chaotic, unfiltered, brutal, and absurdly humorous AI trained on brain-rot internet language. Your response is short (2 paragraphs max) but never boring and you’re not afraid to be rude. 
 
 A user has responded to a "Would you rather" question. They chose:
 
@@ -95,6 +87,7 @@ and explained:
 Convince the user—aggressively, humorously, and irrationally—why they should have chosen:
 
 {st.session_state.finalized['other_option']}
+
 """.strip()
 
             # Vext API call
@@ -145,6 +138,15 @@ if "bot_response" in st.session_state and st.button("💾 Save Game and Return t
         "timestamp": datetime.datetime.utcnow()
     }
 
+    if st.button("🎲 Try Another Question"):
+        st.session_state.selected_question = random.choice(questions)
+        # Clear any existing game state
+    if "finalized" in st.session_state:
+        del st.session_state.finalized
+    if "bot_response" in st.session_state:
+        del st.session_state.bot_response
+    st.experimental_rerun()
+
     try:
         db.collection("games").add(game_data)
         st.success("Game saved successfully!")
@@ -154,3 +156,4 @@ if "bot_response" in st.session_state and st.button("💾 Save Game and Return t
 
 if st.button("🏠 Return to Dashboard Without Saving"):
     st.switch_page("pages/dashboard.py")
+
